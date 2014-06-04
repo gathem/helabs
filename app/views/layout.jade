@@ -1,7 +1,24 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+doctype !html 5
+head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title #{title}
+    link(rel='stylesheet', href='stylesheets/foundation.css')
+    link(rel='stylesheet', href='stylesheets/style.css')
+    script(src='javascripts/modernizr.js')
   body
-    block content
+    header
+      .row
+        .large-12.columns
+          img(src='images/logo.png' class='logo')
+          div.brand
+            span.green Health
+            span.bold Equity
+            span.green Labs
+    script(src='javascripts/jquery.js')
+    script(src='javascripts/foundation.min.js')
+    script(src='javascripts/quiz.js')
+    script
+      $(document).foundation();
+      $(document).quiz();
+block content

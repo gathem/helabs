@@ -5,3 +5,26 @@ body {
 a {
   color: #00b7ff;
 }
+.brand {
+  display: inline-block;
+  font-size: 26px;
+  line-height: 70px;
+}
+.brand .green {
+  color: #94c13c;
+}
+.brand .bold {
+  font-weight: normal;
+  color: #ddd;
+}
+.logo {
+  margin-top: -12px;
+}
+.circle {
+  width: 15px;
+  height: 15px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #4679bd;
+}

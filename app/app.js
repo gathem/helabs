@@ -21,7 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /// register url mappings
 app.use('/', require('./controllers/index'));
-app.use('/data.txt', require('./models/quizData'));
+app.use('/spec', require('./controllers/styleGuide'));
+app.use('/data/quiz', require('./models/quizData'));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
