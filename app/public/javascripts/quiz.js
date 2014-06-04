@@ -17,7 +17,6 @@
           .attr('data-answer', '#answers-' + index)
           .appendTo($('#circles'));
           $('.circle').first().addClass('active-circle');
-
           $('.circle').on('click', function() {
             activateQuestion_($(this).get(0));
           });
@@ -53,13 +52,13 @@
             //verify all questions are answered before scoring
             var allQuestionsAnswered = true;
             $('.answer').each(function(){
-	          var question = $(this);
+              var question = $(this);
               var selected = question.find("input[type='radio']:checked").val();
               if (!selected) {
                 //One of the questions was not answered
                 allQuestionsAnswered = false;
                 var circleEl = '#circle' + $(this).attr('id').substring(7);
-				activateQuestion_($(circleEl).get(0));
+                activateQuestion_($(circleEl).get(0));
               }
             });
             if (allQuestionsAnswered) {
@@ -76,7 +75,7 @@
        * @param {Element} circle The circle element associated with the question to activate
        */
       var activateQuestion_ = function(circle) {
-	      circle = $(circle);
+          circle = $(circle);
           var questionEl = circle.attr('data-question');
           var answerEl = circle.attr('data-answer');
           var circleEl = '#' + circle.attr('id');
@@ -90,30 +89,28 @@
       /**
        * Checks all of the answers
        */
-      var scoreQuiz_ = function(circle) {
-        var numWrong = 0;
-        var numCorrect = 0;
-	    $('.answer').each(function(){
-          var answeredRadio = $(this).find("input[type='radio']:checked");
-          var answer = answeredRadio.val();
-          var correct = answeredRadio.parent().attr('data-cheater');
-          var correctRadio = $(answeredRadio.parent().parent().find('input').get(correct));
-          if (correctRadio.val() == answer) {
-            numCorrect++;
-            window.console.info('correct');
-          } else {
+       var scoreQuiz_ = function() {
+         var numWrong = 0;
+         var numCorrect = 0;
+         $('.answer').each(function(){
+           var answeredRadio = $(this).find("input[type='radio']:checked");
+           var answer = answeredRadio.val();
+           var correct = answeredRadio.parent().attr('data-cheater');
+           var correctRadio = $(answeredRadio.parent().parent().find('input').get(correct));
+           if (correctRadio.val() == answer) {
+             numCorrect++;
+           } else {
             numWrong++;
-            window.console.error('incorrect');
-          }
-        });
-        var stage = $('#circles').parent();
-        stage.html("");
-        var score = "You got " + numCorrect + " out of " + (numCorrect + numWrong) + " correct.";
-        $('<div>')
-          .addClass('panel')
-          .html(score)
-          .appendTo(stage);
-      }
+           }
+         });
+         var stage = $('#circles').parent();
+         stage.html("");
+         var score = "You got " + numCorrect + " out of " + (numCorrect + numWrong) + " correct.";
+         $('<div>')
+           .addClass('panel')
+           .html(score)
+           .appendTo(stage);
+       }
 
 
       /**
@@ -136,10 +133,10 @@
              .appendTo($('#answers-' + index))
              .html(' ' + question[key])
                .prepend(
-	             $('<input type="radio">')
-	               .attr('value', question[key])
-	               .attr('name', 'answers-' + index)
-	               .addClass('answer-radio'));
+                 $('<input type="radio">')
+                   .attr('value', question[key])
+                   .attr('name', 'answers-' + index)
+                   .addClass('answer-radio'));
            });
            $('.answer').first().toggleClass('visible', 'hidden');
        }
@@ -181,6 +178,9 @@
          handleNextButton_();
          return this;
        }
+
+
+       // Entry point
        $.get('/data/quiz', this.run);
     }
   });
