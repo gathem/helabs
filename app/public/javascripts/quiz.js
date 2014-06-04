@@ -12,11 +12,19 @@
         $('<div>')
           .addClass('circle')
           .attr('id', 'circle-' + index)
-          .attr('data-question', 'question-' + index)
+          .attr('data-question', '#question-' + index)
+          .attr('data-answer', '#answers-' + index)
           .appendTo($('#circles'));
           $('.circle').first().addClass('active-circle');
-          $('circle').on('click', function() {
-            // TODO(matt): get back to this
+
+          $('.circle').on('click', function() {
+            var questionEl = $(this).attr('data-question');
+            var answerEl = $(this).attr('data-answer');
+            var circleEl = '#' + $(this).attr('id');
+            $('.visible').removeClass('visible');
+            $('.active-circle').removeClass('active-circle');
+            $(circleEl).addClass('active-circle');
+            $(questionEl + ',' + answerEl).addClass('visible');
           });
       }
 
@@ -81,7 +89,7 @@
             window.seconds += 1;
             var minutes = Math.floor(window.seconds / 60);
             var seconds = window.seconds % 60;
-            if (seconds < 60) {
+            if (Number(seconds) < 10) {
               seconds = "0" + seconds;    
             } 
             var timeString = minutes + ":" + seconds;                          
