@@ -4,6 +4,7 @@
       this.defaultOptions = {};
       var settings = $.extend({}, this.defaultOptions, options);
 
+
       /**
        * Creates a clickable circle for each question.
        * @param {number} index represents the question number.
@@ -18,13 +19,7 @@
           $('.circle').first().addClass('active-circle');
 
           $('.circle').on('click', function() {
-            var questionEl = $(this).attr('data-question');
-            var answerEl = $(this).attr('data-answer');
-            var circleEl = '#' + $(this).attr('id');
-            $('.visible').removeClass('visible');
-            $('.active-circle').removeClass('active-circle');
-            $(circleEl).addClass('active-circle');
-            $(questionEl + ',' + answerEl).addClass('visible');
+            activateQuestion_($(this).get(0));
           });
       }
 
@@ -47,6 +42,81 @@
 
 
       /**
+       * Handle next button and scoring.
+       */
+      var handleNextButton_ = function() {
+        $('#button').on('click', function() {
+          var next = $('.active-circle').next().get(0);
+          if (next) {
+            activateQuestion_(next);
+          } else {
+            //verify all questions are answered before scoring
+            var allQuestionsAnswered = true;
+            $('.answer').each(function(){
+	          var question = $(this);
+              var selected = question.find("input[type='radio']:checked").val();
+              if (!selected) {
+                //One of the questions was not answered
+                allQuestionsAnswered = false;
+                var circleEl = '#circle' + $(this).attr('id').substring(7);
+				activateQuestion_($(circleEl).get(0));
+              }
+            });
+            if (allQuestionsAnswered) {
+              scoreQuiz_();
+            }
+          }
+        });
+      }
+
+
+      /**
+       * given a circle Element, make it, and its associated question active.
+       * Note: this takes a Javascript element, NOT a jquery array of elements.
+       * @param {Element} circle The circle element associated with the question to activate
+       */
+      var activateQuestion_ = function(circle) {
+	      circle = $(circle);
+          var questionEl = circle.attr('data-question');
+          var answerEl = circle.attr('data-answer');
+          var circleEl = '#' + circle.attr('id');
+          $('.visible').removeClass('visible');
+          $('.active-circle').removeClass('active-circle');
+          $(circleEl).addClass('active-circle');
+          $(questionEl + ',' + answerEl).addClass('visible');
+      }
+
+
+      /**
+       * Checks all of the answers
+       */
+      var scoreQuiz_ = function(circle) {
+        var numWrong = 0;
+        var numCorrect = 0;
+	    $('.answer').each(function(){
+          var answeredRadio = $(this).find("input[type='radio']:checked");
+          var answer = answeredRadio.val();
+          var correct = answeredRadio.parent().attr('data-cheater');
+          var correctRadio = $(answeredRadio.parent().parent().find('input').get(correct));
+          if (correctRadio.val() == answer) {
+            numCorrect++;
+            window.console.info('correct');
+          } else {
+            numWrong++;
+            window.console.error('incorrect');
+          }
+        });
+        var stage = $('#circles').parent();
+        stage.html("");
+        var score = "You got " + numCorrect + " out of " + (numCorrect + numWrong) + " correct.";
+        $('<div>')
+          .addClass('panel')
+          .html(score)
+          .appendTo(stage);
+      }
+
+
+      /**
        * Creates all of answers, hidden initially.
        * @param {Object} question contains all of the info needed to render the question
        * @param {number} index represents the question number.
@@ -62,11 +132,13 @@
            $('<div>')
              .addClass(key + ' columns')
              .attr('id', 'answers-' + index + '-' + key)
+             .attr('data-cheater', question.correct)
              .appendTo($('#answers-' + index))
              .html(' ' + question[key])
                .prepend(
 	             $('<input type="radio">')
 	               .attr('value', question[key])
+	               .attr('name', 'answers-' + index)
 	               .addClass('answer-radio'));
            });
            $('.answer').first().toggleClass('visible', 'hidden');
@@ -97,6 +169,7 @@
           }, 1000);
        }
 
+
        this.run = function(data) {
          for (var index in data) {
            var question = data[index];
@@ -105,10 +178,10 @@
            renderAnswers_(question, index);
          }
          renderClock_();
+         handleNextButton_();
          return this;
        }
        $.get('/data/quiz', this.run);
-       // boilerplate continues
     }
   });
 })(jQuery);
