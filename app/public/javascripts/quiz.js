@@ -4,26 +4,26 @@
       this.defaultOptions = {};
       var settings = $.extend({}, this.defaultOptions, options);
       return new function() {
-        var $this = $(this);
+		var $this = $(this);
 		// above this is just boilerplate
 		$.get('/data/quiz', function(response){
 		  $.each(response, function(index) {
 		    var question = response[index];
-			// create circles
-	        $('<div>')
+		    // create circles
+		    $('<div>')
 	          .addClass('circle')
 	          .attr('id', 'circle-' + index)
 	          .attr('data-question', 'question-' + index)
 	          .appendTo($('#circles'));
-			$('.circle').first().addClass('active-circle');
-			// create questions
+		    $('.circle').first().addClass('active-circle');
+		    // create questions
 	        $('<div>')
 	          .addClass('question hidden')
 	          .attr('id', 'question-' + index)
 	          .appendTo($('#questions'))
 	          .text(question.question);
 			$('.question').first().toggleClass('visible', 'hidden');
-			// create answers
+		    // create answers
 	        $('<div>')
 	          .addClass('answer hidden')
 	          .attr('id', 'answers-' + index)
@@ -39,25 +39,25 @@
 			});
 			$('.answer').first().toggleClass('visible', 'hidden');		
 		  });
-			// create clock
-			$('<img>')
-			  .attr('src', 'images/timer_icon.png')
-			  .appendTo('#clock');
-			$('<div>')
-			  .attr('id', 'timer')
-			  .appendTo('#clock');
-		    // start timer
-			window.seconds = 0;
-			setInterval(function() {
-			  window.seconds += 1;
-			  var minutes = Math.floor(window.seconds / 60);
-			  var seconds = window.seconds % 60;
-			  if (seconds < 60) {
-			    seconds = "0" + seconds;	
-			  } 
-			  var timeString = minutes + ":" + seconds;			  			
-			  $('#timer').text(timeString);
-			}, 1000);
+		  // create clock
+		  $('<img>')
+		    .attr('src', 'images/timer_icon.png')
+		    .appendTo('#clock');
+		  $('<div>')
+		    .attr('id', 'timer')
+		    .appendTo('#clock');
+		  // start timer
+		  window.seconds = 0;
+		  setInterval(function() {
+		    window.seconds += 1;
+		    var minutes = Math.floor(window.seconds / 60);
+		    var seconds = window.seconds % 60;
+		    if (seconds < 60) {
+		      seconds = "0" + seconds;	
+		    } 
+		    var timeString = minutes + ":" + seconds;			  			
+		    $('#timer').text(timeString);
+		  }, 1000);
 		});
 		// boilerplate continues
       };
