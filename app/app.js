@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+/// register url mappings
 app.use('/', require('./controllers/index'));
 app.use('/data.txt', require('./models/quizData'));
 
